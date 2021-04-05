@@ -43,6 +43,7 @@
 
 #include "open_spiel/abseil-cpp/absl/types/optional.h"
 #include "open_spiel/games/gin_rummy/gin_rummy_utils.h"
+#include "open_spiel/observer.h"
 #include "open_spiel/spiel.h"
 
 namespace open_spiel {
@@ -73,6 +74,9 @@ inline constexpr int kObservationTensorSize =
     + kMaxStockSize      // Stock size
     + kNumMeldActions;   // Opponent's layed melds
 
+class GinRummyGame;
+class GinRummyObserver;
+
 class GinRummyState : public State {
  public:
   explicit GinRummyState(std::shared_ptr<const Game> game, bool oklahoma,
@@ -93,6 +97,8 @@ class GinRummyState : public State {
   void DoApplyAction(Action action) override;
 
  private:
+  friend class GinRummyObserver;
+
   enum class Phase {
     kDeal,
     kFirstUpcard,
@@ -204,6 +210,12 @@ class GinRummyGame : public Game {
   int MaxGameLength() const override { return 300; }
   // TODO: verify whether this bound is tight and/or tighten it.
   int MaxChanceNodesInHistory() const override { return MaxGameLength(); }
+  // New Observation API TODO keep this comment?
+  std::shared_ptr<Observer> MakeObserver(
+      absl::optional<IIGObservationType> iig_obs_type,
+      const GameParameters& params) const override;
+  // Used to implement the old observation API.
+  std::shared_ptr<GinRummyObserver> default_observer_;
 
  private:
   const bool oklahoma_;
