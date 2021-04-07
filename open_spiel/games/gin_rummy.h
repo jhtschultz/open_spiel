@@ -66,13 +66,13 @@ inline constexpr int kMeldActionBase = 56;  // First lay meld action
 inline constexpr int kNumMeldActions = 185;
 inline constexpr int kNumDistinctActions = kMeldActionBase + kNumMeldActions;
 inline constexpr int kObservationTensorSize =
-    kNumPlayers          // Player turn
-    + kDefaultKnockCard  // Knock card
-    + kNumCards          // Player hand
-    + kNumCards          // Upcard
-    + kNumCards          // Discard pile
-    + kMaxStockSize      // Stock size
-    + kNumMeldActions;   // Opponent's layed melds
+    kNumPlayers             // Player turn
+    + kDefaultKnockCard     // Knock card
+    + kNumCards             // Player hand
+    + kNumCards             // Upcard
+    + kNumCards             // Discard pile
+    + kMaxStockSize         // Stock size
+    + kNumMeldActions * 2;  // Layed melds of both players
 
 class GinRummyGame;
 class GinRummyObserver;
@@ -210,11 +210,10 @@ class GinRummyGame : public Game {
   int MaxGameLength() const override { return 300; }
   // TODO: verify whether this bound is tight and/or tighten it.
   int MaxChanceNodesInHistory() const override { return MaxGameLength(); }
-  // New Observation API TODO keep this comment?
   std::shared_ptr<Observer> MakeObserver(
       absl::optional<IIGObservationType> iig_obs_type,
       const GameParameters& params) const override;
-  // Used to implement the old observation API.
+
   std::shared_ptr<GinRummyObserver> default_observer_;
 
  private:
