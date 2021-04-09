@@ -20,6 +20,24 @@ namespace open_spiel {
 namespace universal_poker {
 namespace logic {
 
+void MyTests() {
+  std::cout << "My Test" << std::endl;
+
+  CardSet cs("AhKsQhJhTh");
+
+  std::cout << "CardSet: " << cs.ToString() << std::endl;
+  for (auto card : cs.ToCardArray()) {
+    std::cout << "Card: " << card << std::endl;
+  }
+  std::cout << "Rank: " << cs.RankCards() << std::endl;
+  std::cout << "Count Cards: " << cs.NumCards() << std::endl;
+
+  //CardSet deck(4, 13);
+  //std::cout << "CardSet: " << deck.ToString() << std::endl;
+  //std::cout << "Rank: " << deck.RankCards() << std::endl;
+  //std::cout << "Count Cards: " << deck.NumCards() << std::endl;
+}
+
 void BasicCardSetTests() {
   CardSet cs("AhKsQhJhTh");
 
@@ -49,5 +67,6 @@ void BasicCardSetTests() {
 }  // namespace open_spiel
 
 int main(int argc, char **argv) {
-  open_spiel::universal_poker::logic::BasicCardSetTests();
+  open_spiel::universal_poker::logic::MyTests();
+  //open_spiel::universal_poker::logic::BasicCardSetTests();
 }

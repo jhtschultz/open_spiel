@@ -25,9 +25,25 @@ namespace {
 
 namespace testing = open_spiel::testing;
 
+void UtilTests() {
+  std::vector<int> full_deck;
+  for (int i = 0; i < 30; ++i) full_deck.push_back(i);
+  std::vector<std::vector<int>> all_melds = Utils::AllMelds(full_deck);
+  std::cout <<  all_melds.size() << std::endl;
+
+  // Some simple meld tests
+  std::vector<std::string> cards;
+  //cards = {"4s", "4c", "4d", "4h", "5s", "5c", "5d", "6s", "2c", "3s", "3c"};
+  //std::vector<int> card_ints = CardStringsToCardInts(cards);
+  std::vector<int> card_ints;
+  for (int i = 0; i < 30; ++i) card_ints.push_back(i);
+
+  std::cout << Utils::HandToString(card_ints) << std::endl;
+}
+
 void BasicGameTests() {
   testing::LoadGameTest("gin_rummy");
-  testing::RandomSimTest(*LoadGame("gin_rummy"), 10);
+  //testing::RandomSimTest(*LoadGame("gin_rummy"), 10);
 }
 
 void MeldTests() {
@@ -35,54 +51,54 @@ void MeldTests() {
   // length greater than 5 can be expressed as two or more smaller melds.
   std::vector<int> full_deck;
   for (int i = 0; i < kNumCards; ++i) full_deck.push_back(i);
-  std::vector<std::vector<int>> all_melds = AllMelds(full_deck);
+  std::vector<std::vector<int>> all_melds = Utils::AllMelds(full_deck);
   SPIEL_CHECK_EQ(all_melds.size(), kNumMeldActions);
 
   // Some simple meld tests
   std::vector<std::string> cards;
   cards = {"As", "2s", "3s"};
-  SPIEL_CHECK_TRUE(IsSuitMeld(CardStringsToCardInts(cards)));
-  SPIEL_CHECK_FALSE(IsRankMeld(CardStringsToCardInts(cards)));
+  SPIEL_CHECK_TRUE(Utils::IsSuitMeld(Utils::CardStringsToCardInts(cards)));
+  SPIEL_CHECK_FALSE(Utils::IsRankMeld(Utils::CardStringsToCardInts(cards)));
   cards = {"As", "Ac", "Ad"};
-  SPIEL_CHECK_TRUE(IsRankMeld(CardStringsToCardInts(cards)));
-  SPIEL_CHECK_FALSE(IsSuitMeld(CardStringsToCardInts(cards)));
+  SPIEL_CHECK_TRUE(Utils::IsRankMeld(Utils::CardStringsToCardInts(cards)));
+  SPIEL_CHECK_FALSE(Utils::IsSuitMeld(Utils::CardStringsToCardInts(cards)));
   cards = {"As", "Ac", "Ad", "2s"};
-  SPIEL_CHECK_FALSE(IsRankMeld(CardStringsToCardInts(cards)));
-  SPIEL_CHECK_FALSE(IsSuitMeld(CardStringsToCardInts(cards)));
+  SPIEL_CHECK_FALSE(Utils::IsRankMeld(Utils::CardStringsToCardInts(cards)));
+  SPIEL_CHECK_FALSE(Utils::IsSuitMeld(Utils::CardStringsToCardInts(cards)));
 
   // No "around the corner" melds
   cards = {"As", "2s", "3s", "Ks"};
-  SPIEL_CHECK_FALSE(IsRankMeld(CardStringsToCardInts(cards)));
-  SPIEL_CHECK_FALSE(IsSuitMeld(CardStringsToCardInts(cards)));
+  SPIEL_CHECK_FALSE(Utils::IsRankMeld(Utils::CardStringsToCardInts(cards)));
+  SPIEL_CHECK_FALSE(Utils::IsSuitMeld(Utils::CardStringsToCardInts(cards)));
 
   // These cards are represented internally as consecutive ints
   // but are not a meld.
   cards = {"Js", "Qs", "Ks", "Ac"};
-  SPIEL_CHECK_FALSE(IsRankMeld(CardStringsToCardInts(cards)));
-  SPIEL_CHECK_FALSE(IsSuitMeld(CardStringsToCardInts(cards)));
+  SPIEL_CHECK_FALSE(Utils::IsRankMeld(Utils::CardStringsToCardInts(cards)));
+  SPIEL_CHECK_FALSE(Utils::IsSuitMeld(Utils::CardStringsToCardInts(cards)));
 
   // Check that the meld_to_int and int_to_meld maps work correctly.
   int meld_id;
   cards = {"Ks", "Kc", "Kd", "Kh"};
-  meld_id = meld_to_int.at(CardStringsToCardInts(cards));
+  meld_id = Utils::meld_to_int.at(Utils::CardStringsToCardInts(cards));
   SPIEL_CHECK_EQ(meld_id, 64);
-  SPIEL_CHECK_EQ(meld_to_int.at(int_to_meld.at(64)), 64);
+  SPIEL_CHECK_EQ(Utils::meld_to_int.at(Utils::int_to_meld.at(64)), 64);
   cards = {"As", "2s", "3s"};
-  meld_id = meld_to_int.at(CardStringsToCardInts(cards));
+  meld_id = Utils::meld_to_int.at(Utils::CardStringsToCardInts(cards));
   SPIEL_CHECK_EQ(meld_id, 65);
-  SPIEL_CHECK_EQ(meld_to_int.at(int_to_meld.at(65)), 65);
+  SPIEL_CHECK_EQ(Utils::meld_to_int.at(Utils::int_to_meld.at(65)), 65);
   cards = {"As", "2s", "3s", "4s"};
-  meld_id = meld_to_int.at(CardStringsToCardInts(cards));
+  meld_id = Utils::meld_to_int.at(Utils::CardStringsToCardInts(cards));
   SPIEL_CHECK_EQ(meld_id, 109);
-  SPIEL_CHECK_EQ(meld_to_int.at(int_to_meld.at(109)), 109);
+  SPIEL_CHECK_EQ(Utils::meld_to_int.at(Utils::int_to_meld.at(109)), 109);
   cards = {"As", "2s", "3s", "4s", "5s"};
-  meld_id = meld_to_int.at(CardStringsToCardInts(cards));
+  meld_id = Utils::meld_to_int.at(Utils::CardStringsToCardInts(cards));
   SPIEL_CHECK_EQ(meld_id, 149);
-  SPIEL_CHECK_EQ(meld_to_int.at(int_to_meld.at(149)), 149);
+  SPIEL_CHECK_EQ(Utils::meld_to_int.at(Utils::int_to_meld.at(149)), 149);
   cards = {"9h", "Th", "Jh", "Qh", "Kh"};
-  meld_id = meld_to_int.at(CardStringsToCardInts(cards));
+  meld_id = Utils::meld_to_int.at(Utils::CardStringsToCardInts(cards));
   SPIEL_CHECK_EQ(meld_id, 184);
-  SPIEL_CHECK_EQ(meld_to_int.at(int_to_meld.at(184)), 184);
+  SPIEL_CHECK_EQ(Utils::meld_to_int.at(Utils::int_to_meld.at(184)), 184);
 
   // Should find five rank melds and one suit meld.
   // +--------------------------+
@@ -92,8 +108,8 @@ void MeldTests() {
   // |Ah                        |
   // +--------------------------+
   cards = {"As", "Ac", "Ad", "Ah", "2s", "3s"};
-  std::vector<int> card_ints = CardStringsToCardInts(cards);
-  all_melds = AllMelds(card_ints);
+  std::vector<int> card_ints = Utils::CardStringsToCardInts(cards);
+  all_melds = Utils::AllMelds(card_ints);
   SPIEL_CHECK_EQ(all_melds.size(), 6);
 
   // More complicated example with 14 possible melds.
@@ -104,8 +120,8 @@ void MeldTests() {
   // |      4h5h                |
   // +--------------------------+
   cards = {"4s", "4c", "4d", "4h", "5s", "5c", "5d", "5h", "6s", "6c", "6d"};
-  card_ints = CardStringsToCardInts(cards);
-  all_melds = AllMelds(card_ints);
+  card_ints = Utils::CardStringsToCardInts(cards);
+  all_melds = Utils::AllMelds(card_ints);
   SPIEL_CHECK_EQ(all_melds.size(), 14);
 
   // +--------------------------+
@@ -116,12 +132,12 @@ void MeldTests() {
   // +--------------------------+
   // Should find the best meld group 4s4d4h, 5s5c5d, 2c3c4c with 3 deadwood.
   cards = {"4s", "4c", "4d", "4h", "5s", "5c", "5d", "6s", "2c", "3s", "3c"};
-  card_ints = CardStringsToCardInts(cards);
-  std::vector<std::vector<int>> meld_group = BestMeldGroup(card_ints);
+  card_ints = Utils::CardStringsToCardInts(cards);
+  std::vector<std::vector<int>> meld_group = Utils::BestMeldGroup(card_ints);
   std::cout << meld_group << std::endl;
   for (auto meld : meld_group)
-    std::cout << CardIntsToCardStrings(meld) << std::endl;
-  int deadwood = MinDeadwood(card_ints);
+    std::cout << Utils::CardIntsToCardStrings(meld) << std::endl;
+  int deadwood = Utils::MinDeadwood(card_ints);
   SPIEL_CHECK_EQ(deadwood, 3);
 }
 
@@ -384,7 +400,7 @@ void WallTest() {
   state->ApplyAction(54);
   // Player1 made gin, so Player0 cannot layoff the Th on JhQhKh
   legal_actions = state->LegalActions();
-  SPIEL_CHECK_FALSE(absl::c_linear_search(legal_actions, CardInt("Th")));
+  SPIEL_CHECK_FALSE(absl::c_linear_search(legal_actions, Utils::CardInt("Th")));
   // Player0 lays melds.
   state->ApplyAction(213);
   state->ApplyAction(132);
@@ -537,6 +553,7 @@ void OklahomaTest() {
 }  // namespace open_spiel
 
 int main(int argc, char** argv) {
+  open_spiel::gin_rummy::UtilTests();
   open_spiel::gin_rummy::BasicGameTests();
   open_spiel::gin_rummy::MeldTests();
   open_spiel::gin_rummy::GameplayTest1();

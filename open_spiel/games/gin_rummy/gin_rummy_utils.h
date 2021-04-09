@@ -33,59 +33,70 @@ using VecInt = std::vector<int>;
 using VecVecInt = std::vector<std::vector<int>>;
 using VecVecVecInt = std::vector<std::vector<std::vector<int>>>;
 
-std::string CardString(absl::optional<int> card);
-std::string HandToString(const VecInt &cards);
+class Utils {
+ public:
+  Utils();
 
-int CardInt(std::string card);
+  static std::string CardString(absl::optional<int> card);
+  static std::string HandToString(const VecInt &cards);
+  
+  static int CardInt(std::string card);
+  
+  static std::vector<std::string> CardIntsToCardStrings(const VecInt &cards);
+  static VecInt CardStringsToCardInts(const std::vector<std::string> &cards);
+  
+  static int CardValue(int card_index);
+  static int TotalCardValue(const VecInt &cards);
+  static int TotalCardValue(const VecVecInt &meld_group);
+  static int CardRank(const int card_index);
+  static int CardSuit(const int card_index);
+  
+  static bool CompareRanks(int card_1, int card_2);
+  static bool CompareSuits(int card_1, int card_2);
+  
+  // TODO
+  static bool IsConsecutive(const VecInt &v);
+  static bool IsRankMeld(const VecInt &cards);
+  static bool IsSuitMeld(const VecInt &cards);
+  
+  static VecVecInt RankMelds(VecInt cards);
+  static VecVecInt SuitMelds(VecInt cards);
+  static VecVecInt AllMelds(const VecInt &cards);
+  
+  static bool VectorsIntersect(VecInt *v1, VecInt *v2);
+  
+  static VecVecInt NonOverlappingMelds(VecInt *meld, VecVecInt *melds);
+  
+  static void AllPaths(VecInt *meld, VecVecInt *all_melds, VecVecInt *path,
+                VecVecVecInt *all_paths);
+  
+  static VecVecVecInt AllMeldGroups(const VecInt &cards);
+  
+  static VecVecInt BestMeldGroup(const VecInt &cards);
+  
+  static int MinDeadwood(VecInt hand, absl::optional<int> card);
+  static int MinDeadwood(const VecInt &hand);
+  
+  static int RankMeldLayoff(const VecInt &meld);
+  static VecInt SuitMeldLayoffs(const VecInt &meld);
+  
+  static VecInt LegalMelds(const VecInt &hand, int knock_card);
+  static VecInt LegalDiscards(const VecInt &hand, int knock_card);
+  
+  static VecInt AllLayoffs(const VecInt &layed_melds, const VecInt &previous_layoffs);
+  
+  static int MeldToInt(VecInt meld);
+  
+  static std::map<VecInt, int> BuildMeldToIntMap();
+  static std::map<int, VecInt> BuildIntToMeldMap();
+  
+  // TODO
+  //static const std::map<int, VecInt> int_to_meld = BuildIntToMeldMap();
+  //static const std::map<VecInt, int> meld_to_int = BuildMeldToIntMap();
 
-std::vector<std::string> CardIntsToCardStrings(const VecInt &cards);
-VecInt CardStringsToCardInts(const std::vector<std::string> &cards);
-
-int CardValue(int card_index);
-int TotalCardValue(const VecInt &cards);
-int TotalCardValue(const VecVecInt &meld_group);
-int CardRank(const int card_index);
-int CardSuit(const int card_index);
-
-bool CompareRanks(int card_1, int card_2);
-bool CompareSuits(int card_1, int card_2);
-
-bool IsRankMeld(const VecInt &cards);
-bool IsSuitMeld(const VecInt &cards);
-
-VecVecInt RankMelds(VecInt cards);
-VecVecInt SuitMelds(VecInt cards);
-VecVecInt AllMelds(const VecInt &cards);
-
-bool VectorsIntersect(VecInt *v1, VecInt *v2);
-
-VecVecInt NonOverlappingMelds(VecInt *meld, VecVecInt *melds);
-
-void AllPaths(VecInt *meld, VecVecInt *all_melds, VecVecInt *path,
-              VecVecVecInt *all_paths);
-
-VecVecVecInt AllMeldGroups(const VecInt &cards);
-
-VecVecInt BestMeldGroup(const VecInt &cards);
-
-int MinDeadwood(VecInt hand, absl::optional<int> card);
-int MinDeadwood(const VecInt &hand);
-
-int RankMeldLayoff(const VecInt &meld);
-VecInt SuitMeldLayoffs(const VecInt &meld);
-
-VecInt LegalMelds(const VecInt &hand, int knock_card);
-VecInt LegalDiscards(const VecInt &hand, int knock_card);
-
-VecInt AllLayoffs(const VecInt &layed_melds, const VecInt &previous_layoffs);
-
-int MeldToInt(VecInt meld);
-
-std::map<VecInt, int> BuildMeldToIntMap();
-std::map<int, VecInt> BuildIntToMeldMap();
-
-static const std::map<int, VecInt> int_to_meld = BuildIntToMeldMap();
-static const std::map<VecInt, int> meld_to_int = BuildMeldToIntMap();
+  static std::map<int, VecInt> int_to_meld;
+  static std::map<VecInt, int> meld_to_int;
+};
 
 }  // namespace gin_rummy
 }  // namespace open_spiel

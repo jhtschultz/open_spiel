@@ -24,28 +24,37 @@
 namespace open_spiel {
 namespace gin_rummy {
 
-int CardSuit(int card) { return card / kNumRanks; }
-int CardRank(int card) { return card % kNumRanks; }
+Utils::Utils() : Utils() {
+//  int_to_meld = Utils::BuildIntToMeldMap();
+//  meld_to_int = Utils::BuildMeldToIntMap();
+}
+
+// TODO
+std::map<int, VecInt> Utils::int_to_meld = Utils::BuildIntToMeldMap();
+std::map<VecInt, int> Utils::meld_to_int = Utils::BuildMeldToIntMap();
+
+int Utils::CardSuit(int card) { return card / kNumRanks; }
+int Utils::CardRank(int card) { return card % kNumRanks; }
 
 // All suits are of equal value and suit ordering never factors into gameplay.
 constexpr char kRankChar[] = "A23456789TJQK";
 constexpr char kSuitChar[] = "scdh";
 
-std::string CardString(absl::optional<int> card) {
+std::string Utils::CardString(absl::optional<int> card) {
   if (!card.has_value()) return "XX";
   SPIEL_CHECK_GE(card.value(), 0);
   SPIEL_CHECK_LT(card.value(), kNumCards);
   return {kRankChar[CardRank(card.value())], kSuitChar[CardSuit(card.value())]};
 }
 
-int CardInt(std::string card) {
+int Utils::CardInt(std::string card) {
   SPIEL_CHECK_EQ(card.length(), 2);
   int rank = strchr(kRankChar, card[0]) - kRankChar;
   int suit = strchr(kSuitChar, card[1]) - kSuitChar;
   return suit * kNumRanks + rank;
 }
 
-std::vector<std::string> CardIntsToCardStrings(const VecInt &cards) {
+std::vector<std::string> Utils::CardIntsToCardStrings(const VecInt &cards) {
   std::vector<std::string> rv;
   for (int card : cards) {
     rv.push_back(CardString(card));
@@ -53,7 +62,7 @@ std::vector<std::string> CardIntsToCardStrings(const VecInt &cards) {
   return rv;
 }
 
-VecInt CardStringsToCardInts(const std::vector<std::string> &cards) {
+VecInt Utils::CardStringsToCardInts(const std::vector<std::string> &cards) {
   VecInt rv;
   for (const std::string &card : cards) {
     rv.push_back(CardInt(card));
@@ -61,11 +70,19 @@ VecInt CardStringsToCardInts(const std::vector<std::string> &cards) {
   return rv;
 }
 
-std::string HandToString(const VecInt &cards) {
+// TODO
+std::string Utils::HandToString(const VecInt &cards) {
   std::string rv;
   constexpr int kHandStringSize = 174;
   rv.reserve(kHandStringSize);
-  absl::StrAppend(&rv, "+--------------------------+\n");
+
+  absl::StrAppend(&rv, "+");
+  for (int i = 0; i < kNumRanks; ++i)
+    absl::StrAppend(&rv, "--");
+  absl::StrAppend(&rv, "+\n");
+
+
+
   for (int i = 0; i < kNumSuits; ++i) {
     absl::StrAppend(&rv, "|");
     for (int j = 0; j < kNumRanks; ++j) {
@@ -77,18 +94,22 @@ std::string HandToString(const VecInt &cards) {
     }
     absl::StrAppend(&rv, "|\n");
   }
-  absl::StrAppend(&rv, "+--------------------------+\n");
+
+  absl::StrAppend(&rv, "+");
+  for (int i = 0; i < kNumRanks; ++i)
+    absl::StrAppend(&rv, "--");
+  absl::StrAppend(&rv, "+\n");
   return rv;
 }
 
 // Ace = 1, deuce = 2, ... , face cards = 10.
-int CardValue(int card_index) {
+int Utils::CardValue(int card_index) {
   int value = CardRank(card_index) + 1;
   return std::min(10, value);
 }
 
 // Sums point total over all cards.
-int TotalCardValue(const VecInt &cards) {
+int Utils::TotalCardValue(const VecInt &cards) {
   int total_value = 0;
   for (int card : cards) {
     total_value += CardValue(card);
@@ -97,7 +118,7 @@ int TotalCardValue(const VecInt &cards) {
 }
 
 // Sums point total over all cards.
-int TotalCardValue(const VecVecInt &meld_group) {
+int Utils::TotalCardValue(const VecVecInt &meld_group) {
   int total_value = 0;
   for (const auto &meld : meld_group) {
     for (auto card : meld) {
@@ -108,7 +129,7 @@ int TotalCardValue(const VecVecInt &meld_group) {
 }
 
 // Use suits to break ties.
-bool CompareRanks(int card_1, int card_2) {
+bool Utils::CompareRanks(int card_1, int card_2) {
   if (CardRank(card_1) == CardRank(card_2)) {
     return card_1 < card_2;
   }
@@ -116,21 +137,22 @@ bool CompareRanks(int card_1, int card_2) {
 }
 
 // Use ranks to break ties.
-bool CompareSuits(int card_1, int card_2) {
+bool Utils::CompareSuits(int card_1, int card_2) {
   if (CardSuit(card_1) == CardSuit(card_2)) {
     return CompareRanks(card_1, card_2);
   }
   return CardSuit(card_1) < CardSuit(card_2);
 }
 
-bool IsConsecutive(const VecInt &v) {
+// TODO
+bool Utils::IsConsecutive(const VecInt &v) {
   for (int i = 1; i < v.size(); ++i) {
     if (v[i] != v[i - 1] + 1) return false;
   }
   return true;
 }
 
-bool IsRankMeld(const VecInt &cards) {
+bool Utils::IsRankMeld(const VecInt &cards) {
   if (cards.size() != 3 && cards.size() != 4) {
     return false;
   }
@@ -142,7 +164,7 @@ bool IsRankMeld(const VecInt &cards) {
   return true;
 }
 
-bool IsSuitMeld(const VecInt &cards) {
+bool Utils::IsSuitMeld(const VecInt &cards) {
   if (cards.size() < 3) {
     return false;
   }
@@ -162,7 +184,7 @@ bool IsSuitMeld(const VecInt &cards) {
 }
 
 // Returns all possible rank melds that can be formed from cards.
-VecVecInt RankMelds(VecInt cards) {
+VecVecInt Utils::RankMelds(VecInt cards) {
   VecVecInt melds;
   if (cards.size() < 3) {
     return melds;
@@ -189,7 +211,7 @@ VecVecInt RankMelds(VecInt cards) {
 }
 
 // Returns all possible suit melds that can be formed from cards.
-VecVecInt SuitMelds(VecInt cards) {
+VecVecInt Utils::SuitMelds(VecInt cards) {
   VecVecInt melds;
   if (cards.size() < 3) {
     return melds;
@@ -225,14 +247,14 @@ VecVecInt SuitMelds(VecInt cards) {
 
 // Returns all melds of length 5 or less. Any meld of length 6 or more can
 // be expressed as two or more melds of shorter length.
-VecVecInt AllMelds(const VecInt &cards) {
+VecVecInt Utils::AllMelds(const VecInt &cards) {
   VecVecInt rank_melds = RankMelds(cards);
   VecVecInt suit_melds = SuitMelds(cards);
   rank_melds.insert(rank_melds.end(), suit_melds.begin(), suit_melds.end());
   return rank_melds;
 }
 
-bool VectorsIntersect(VecInt *v1, VecInt *v2) {
+bool Utils::VectorsIntersect(VecInt *v1, VecInt *v2) {
   absl::c_sort(*v1);
   absl::c_sort(*v2);
   VecInt::iterator first1 = v1->begin();
@@ -253,7 +275,7 @@ bool VectorsIntersect(VecInt *v1, VecInt *v2) {
 }
 
 // Returns melds which do not share any common cards with given meld.
-VecVecInt NonOverlappingMelds(VecInt *meld, VecVecInt *melds) {
+VecVecInt Utils::NonOverlappingMelds(VecInt *meld, VecVecInt *melds) {
   VecVecInt rv;
   for (int i = 0; i < melds->size(); ++i) {
     if (!VectorsIntersect(meld, &(*melds)[i])) {
@@ -264,7 +286,7 @@ VecVecInt NonOverlappingMelds(VecInt *meld, VecVecInt *melds) {
 }
 
 // Depth first search used by AllMeldGroups.
-void AllPaths(VecInt *meld, VecVecInt *all_melds, VecVecInt *path,
+void Utils::AllPaths(VecInt *meld, VecVecInt *all_melds, VecVecInt *path,
               VecVecVecInt *all_paths) {
   path->push_back(*meld);
   VecVecInt child_melds = NonOverlappingMelds(meld, all_melds);
@@ -280,7 +302,7 @@ void AllPaths(VecInt *meld, VecVecInt *all_melds, VecVecInt *path,
 
 // A meld group is an arrangement of cards into distinct melds.
 // Accordingly, no two melds in a meld group can share the same card.
-VecVecVecInt AllMeldGroups(const VecInt &cards) {
+VecVecVecInt Utils::AllMeldGroups(const VecInt &cards) {
   VecVecInt all_melds = AllMelds(cards);
   VecVecVecInt all_meld_groups;
   for (VecInt meld : all_melds) {
@@ -292,7 +314,7 @@ VecVecVecInt AllMeldGroups(const VecInt &cards) {
 
 // "Best" means any meld group that achieves the lowest possible deadwood
 // count for the given cards. In general this is non-unique.
-VecVecInt BestMeldGroup(const VecInt &cards) {
+VecVecInt Utils::BestMeldGroup(const VecInt &cards) {
   int best_meld_group_total_value = 0;
   VecVecInt best_meld_group;
   VecVecVecInt all_meld_groups = AllMeldGroups(cards);
@@ -307,13 +329,13 @@ VecVecInt BestMeldGroup(const VecInt &cards) {
 }
 
 // Minimum deadwood count over all meld groups.
-int MinDeadwood(VecInt hand, absl::optional<int> card) {
+int Utils::MinDeadwood(VecInt hand, absl::optional<int> card) {
   if (card.has_value()) hand.push_back(card.value());
   return MinDeadwood(hand);
 }
 
 // Minimum deadwood count over all meld groups.
-int MinDeadwood(const VecInt &hand) {
+int Utils::MinDeadwood(const VecInt &hand) {
   VecInt deadwood = hand;
   VecVecInt best_melds = BestMeldGroup(hand);
 
@@ -334,7 +356,7 @@ int MinDeadwood(const VecInt &hand) {
 }
 
 // Returns the one card that can be layed off on a three card rank meld.
-int RankMeldLayoff(const VecInt &meld) {
+int Utils::RankMeldLayoff(const VecInt &meld) {
   SPIEL_CHECK_EQ(meld.size(), 3);
   SPIEL_CHECK_TRUE(IsRankMeld(meld));
   VecInt suits = {0, 1, 2, 3};
@@ -346,7 +368,7 @@ int RankMeldLayoff(const VecInt &meld) {
 }
 
 // Suit melds have two layoffs, except if the meld ends in an ace or king.
-VecInt SuitMeldLayoffs(const VecInt &meld) {
+VecInt Utils::SuitMeldLayoffs(const VecInt &meld) {
   VecInt layoffs;
   int min_card_index = *std::min_element(meld.begin(), meld.end());
   if (CardRank(min_card_index) > 0) {
@@ -364,7 +386,7 @@ VecInt SuitMeldLayoffs(const VecInt &meld) {
 // the 6's and 7's in melds, leaving us with 26 points. Laying the two suit
 // melds leaves only the 8d for 8 points.
 // Returns vector of meld_ids (see MeldToInt).
-VecInt LegalMelds(const VecInt &hand, int knock_card) {
+VecInt Utils::LegalMelds(const VecInt &hand, int knock_card) {
   int total_hand_value = TotalCardValue(hand);
   std::set<int> meld_set;
   VecInt hand_(hand);
@@ -384,7 +406,7 @@ VecInt LegalMelds(const VecInt &hand, int knock_card) {
 // discard any card in their hand. When a player knocks, however, they must
 // discard a card that preseves the ability to arrange the hand so that the
 // total deadwood is less than the knock card.
-VecInt LegalDiscards(const VecInt &hand, int knock_card) {
+VecInt Utils::LegalDiscards(const VecInt &hand, int knock_card) {
   std::set<int> legal_discards;
   for (int i = 0; i < hand.size(); ++i) {
     VecInt hand_(hand);
@@ -397,7 +419,7 @@ VecInt LegalDiscards(const VecInt &hand, int knock_card) {
   return VecInt(legal_discards.begin(), legal_discards.end());
 }
 
-VecInt AllLayoffs(const VecInt &layed_melds, const VecInt &previous_layoffs) {
+VecInt Utils::AllLayoffs(const VecInt &layed_melds, const VecInt &previous_layoffs) {
   std::set<int> layoffs;
   for (int meld_id : layed_melds) {
     VecInt meld = int_to_meld.at(meld_id);
@@ -422,7 +444,7 @@ VecInt AllLayoffs(const VecInt &layed_melds, const VecInt &previous_layoffs) {
 // This mapping should not depend on the order of melds returned by
 // AllMelds, which is subject to change.
 // See MeldToInt for a description of the mapping.
-std::map<VecInt, int> BuildMeldToIntMap() {
+std::map<VecInt, int> Utils::BuildMeldToIntMap() {
   std::map<VecInt, int> rv;
   VecInt full_deck;
   for (int i = 0; i < kNumCards; ++i) full_deck.push_back(i);
@@ -436,7 +458,7 @@ std::map<VecInt, int> BuildMeldToIntMap() {
 
 // Builds the reverse map [0, 185] -> meld.
 // May not be fast but only gets run once.
-std::map<int, VecInt> BuildIntToMeldMap() {
+std::map<int, VecInt> Utils::BuildIntToMeldMap() {
   std::map<int, VecInt> rv;
   VecInt full_deck;
   for (int i = 0; i < kNumCards; ++i) full_deck.push_back(i);
@@ -461,7 +483,7 @@ std::map<int, VecInt> BuildIntToMeldMap() {
 // The fifth rank meld is the unique meld containing all four cards of a
 // given rank.
 // Suit melds are ordered first by size, then by suit (scdh), then by rank.
-int MeldToInt(VecInt meld) {
+int Utils::MeldToInt(VecInt meld) {
   if (IsRankMeld(meld)) {
     if (meld.size() == 3) {
       VecInt suits;

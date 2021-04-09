@@ -78,93 +78,93 @@ if (${BUILD_WITH_ORTOOLS})
   add_subdirectory (ortools)
 endif()
 
-add_executable(best_response_test best_response_test.cc
-        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(best_response_test best_response_test)
-
-add_executable(cfr_test cfr_test.cc
-        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(cfr_test cfr_test)
-
-add_executable(cfr_br_test cfr_br_test.cc
-        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(cfr_br_test cfr_br_test)
-
-add_executable(corr_dist_test corr_dist_test.cc
-        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(corr_dist_test corr_dist_test)
-
-add_executable(corr_dev_builder_test corr_dev_builder_test.cc
-        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(corr_dev_builder_test corr_dev_builder_test)
-
-add_executable(deterministic_policy_test deterministic_policy_test.cc
-    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(deterministic_policy_test deterministic_policy_test)
-
-add_executable(evaluate_bots_test evaluate_bots_test.cc
-    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(evaluate_bots_test evaluate_bots_test)
-
-add_executable(external_sampling_mccfr_test external_sampling_mccfr_test.cc
-    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(external_sampling_mccfr_test external_sampling_mccfr_test)
-
-add_executable(get_all_histories_test get_all_histories_test.cc
-    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(get_all_histories_test get_all_histories_test)
-
-add_executable(get_all_states_test get_all_states_test.cc
-    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(get_all_states_test get_all_states_test)
-
-add_executable(get_legal_actions_map_test get_legal_actions_map_test.cc
-    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(get_legal_actions_map_test get_legal_actions_map_test)
-
-add_executable(history_tree_test history_tree_test.cc
-        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(history_tree_test history_tree_test)
-
-add_executable(infostate_tree_test   infostate_tree_test.cc
-        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(infostate_tree_test infostate_tree_test)
-
-add_executable(is_mcts_test is_mcts_test.cc
-        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(is_mcts_test is_mcts_test)
-
-add_executable(matrix_game_utils_test matrix_game_utils_test.cc
-    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(matrix_game_utils_test matrix_game_utils_test)
-
-add_executable(minimax_test minimax_test.cc
-    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(minimax_test minimax_test)
-
-add_executable(oos_test oos_test.cc
-    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(oos_test oos_test)
-
-add_executable(outcome_sampling_mccfr_test outcome_sampling_mccfr_test.cc
-    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(outcome_sampling_mccfr_test outcome_sampling_mccfr_test)
-
-add_executable(state_distribution_test state_distribution_test.cc
-    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(state_distribution_test state_distribution_test)
-
-add_executable(tabular_exploitability_test tabular_exploitability_test.cc
-    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(tabular_exploitability_test tabular_exploitability_test)
-
-add_executable(tensor_game_utils_test tensor_game_utils_test.cc
-    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(tensor_game_utils_test tensor_game_utils_test)
-
-add_executable(trajectories_test trajectories_test.cc
-    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
-add_test(trajectories_test trajectories_test)
+#add_executable(best_response_test best_response_test.cc
+#        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(best_response_test best_response_test)
+#
+#add_executable(cfr_test cfr_test.cc
+#        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(cfr_test cfr_test)
+#
+#add_executable(cfr_br_test cfr_br_test.cc
+#        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(cfr_br_test cfr_br_test)
+#
+#add_executable(corr_dist_test corr_dist_test.cc
+#        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(corr_dist_test corr_dist_test)
+#
+#add_executable(corr_dev_builder_test corr_dev_builder_test.cc
+#        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(corr_dev_builder_test corr_dev_builder_test)
+#
+#add_executable(deterministic_policy_test deterministic_policy_test.cc
+#    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(deterministic_policy_test deterministic_policy_test)
+#
+#add_executable(evaluate_bots_test evaluate_bots_test.cc
+#    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(evaluate_bots_test evaluate_bots_test)
+#
+#add_executable(external_sampling_mccfr_test external_sampling_mccfr_test.cc
+#    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(external_sampling_mccfr_test external_sampling_mccfr_test)
+#
+#add_executable(get_all_histories_test get_all_histories_test.cc
+#    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(get_all_histories_test get_all_histories_test)
+#
+#add_executable(get_all_states_test get_all_states_test.cc
+#    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(get_all_states_test get_all_states_test)
+#
+#add_executable(get_legal_actions_map_test get_legal_actions_map_test.cc
+#    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(get_legal_actions_map_test get_legal_actions_map_test)
+#
+#add_executable(history_tree_test history_tree_test.cc
+#        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(history_tree_test history_tree_test)
+#
+#add_executable(infostate_tree_test   infostate_tree_test.cc
+#        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(infostate_tree_test infostate_tree_test)
+#
+#add_executable(is_mcts_test is_mcts_test.cc
+#        $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(is_mcts_test is_mcts_test)
+#
+#add_executable(matrix_game_utils_test matrix_game_utils_test.cc
+#    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(matrix_game_utils_test matrix_game_utils_test)
+#
+#add_executable(minimax_test minimax_test.cc
+#    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(minimax_test minimax_test)
+#
+#add_executable(oos_test oos_test.cc
+#    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(oos_test oos_test)
+#
+#add_executable(outcome_sampling_mccfr_test outcome_sampling_mccfr_test.cc
+#    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(outcome_sampling_mccfr_test outcome_sampling_mccfr_test)
+#
+#add_executable(state_distribution_test state_distribution_test.cc
+#    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(state_distribution_test state_distribution_test)
+#
+#add_executable(tabular_exploitability_test tabular_exploitability_test.cc
+#    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(tabular_exploitability_test tabular_exploitability_test)
+#
+#add_executable(tensor_game_utils_test tensor_game_utils_test.cc
+#    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(tensor_game_utils_test tensor_game_utils_test)
+#
+#add_executable(trajectories_test trajectories_test.cc
+#    $<TARGET_OBJECTS:algorithms> ${OPEN_SPIEL_OBJECTS})
+#add_test(trajectories_test trajectories_test)
 
 add_subdirectory (alpha_zero)
 add_subdirectory (alpha_zero_torch)

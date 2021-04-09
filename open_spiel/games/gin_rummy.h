@@ -48,10 +48,14 @@
 namespace open_spiel {
 namespace gin_rummy {
 
+// TODO
+inline constexpr int kDefaultNumRanks = 13;
+inline constexpr int kDefaultNumSuits = 4;
+
 inline constexpr int kNumPlayers = 2;
 inline constexpr int kMaxPossibleDeadwood = 98;  // E.g. KsKcQdQhJsJcTdTh9s9c
 inline constexpr int kMaxNumDrawUpcardActions = 50;
-inline constexpr int kHandSize = 10;
+inline constexpr int kDefaultHandSize = 10;
 inline constexpr int kMaxStockSize = 31;  // Stock size when play begins
 inline constexpr int kWallStockSize = 2;
 inline constexpr int kDefaultKnockCard = 10;
@@ -76,7 +80,8 @@ inline constexpr int kObservationTensorSize =
 class GinRummyState : public State {
  public:
   explicit GinRummyState(std::shared_ptr<const Game> game, bool oklahoma,
-                         int knock_card, int gin_bonus, int undercut_bonus);
+                         int knock_card, int gin_bonus, int undercut_bonus,
+                         int num_ranks, int num_suits, int hand_size);
   Player CurrentPlayer() const override;
   std::string ActionToString(Player player, Action action) const override;
   std::string ToString() const override;
@@ -136,6 +141,12 @@ class GinRummyState : public State {
   int knock_card_;       // The maximum deadwood total for a legal knock.
   const int gin_bonus_;
   const int undercut_bonus_;
+  // TODO
+  const int num_ranks_;
+  const int num_suits_;
+  const int hand_size_;
+  const int num_cards_;
+  //Utils utils_ = Utils();
 
   Phase phase_ = Phase::kDeal;
   Player cur_player_ = kChancePlayerId;
@@ -195,7 +206,8 @@ class GinRummyGame : public Game {
   std::unique_ptr<State> NewInitialState() const override {
     return std::unique_ptr<State>(
         new GinRummyState(shared_from_this(), oklahoma_, knock_card_,
-                          gin_bonus_, undercut_bonus_));
+                          gin_bonus_, undercut_bonus_, num_ranks_, num_suits_,
+                          hand_size_));
   }
   std::vector<int> ObservationTensorShape() const override {
     return {kObservationTensorSize};
@@ -210,6 +222,9 @@ class GinRummyGame : public Game {
   const int knock_card_;
   const int gin_bonus_;
   const int undercut_bonus_;
+  const int num_ranks_;
+  const int num_suits_;
+  const int hand_size_;
 };
 
 }  // namespace gin_rummy
