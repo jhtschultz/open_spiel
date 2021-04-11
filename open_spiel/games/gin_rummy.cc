@@ -74,7 +74,7 @@ GinRummyState::GinRummyState(std::shared_ptr<const Game> game, bool oklahoma,
       num_suits_(num_suits),
       hand_size_(hand_size),
       num_cards_(num_ranks * num_suits),
-      utils_(Utils(num_ranks, num_suits)),
+      utils_(Utils(num_ranks, num_suits, hand_size)),
       deck_(num_ranks * num_suits, true) {}
 
 int GinRummyState::CurrentPlayer() const {

@@ -26,10 +26,11 @@ namespace gin_rummy {
 
 //Utils::Utils() : Utils() {}
 
-Utils::Utils(int num_ranks, int num_suits) :
+Utils::Utils(int num_ranks, int num_suits, int hand_size) :
       num_ranks_(num_ranks),
       num_suits_(num_suits),
       num_cards_(num_ranks * num_suits_),
+      hand_size_(hand_size),
       rank_comp_(RankComparator(num_ranks)),
       suit_comp_(SuitComparator(num_ranks)),
       int_to_meld(BuildIntToMeldMap()),
@@ -353,8 +354,8 @@ int Utils::MinDeadwood(const VecInt &hand) const {
                      deadwood.end());
     }
   }
-  // If we have 11 cards we can discard one.
-  if (hand.size() == kMaxHandSize && !deadwood.empty()) {
+  // If we have 11 cards we can discard one. TODO doesn't have to be 11
+  if (hand.size() == hand_size_ + 1 && !deadwood.empty()) {
     absl::c_sort(deadwood, rank_comp_);
     deadwood.pop_back();
   }

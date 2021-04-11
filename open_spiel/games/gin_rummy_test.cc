@@ -26,7 +26,7 @@ namespace {
 namespace testing = open_spiel::testing;
 
 void UtilTests() {
-  Utils utils = Utils(13, 4);
+  Utils utils = Utils(13, 4, 10);
   std::vector<int> full_deck;
   for (int i = 0; i < 30; ++i) full_deck.push_back(i);
   std::vector<std::vector<int>> all_melds = utils.AllMelds(full_deck);
@@ -49,7 +49,7 @@ void BasicGameTests() {
 
 void MeldTests() {
   // TODO
-  Utils utils = Utils(13, 4);
+  Utils utils = Utils(13, 4, 10);
 
   // There are 185 melds of length between 3 and 5 cards. All melds of
   // length greater than 5 can be expressed as two or more smaller melds.
@@ -347,7 +347,7 @@ void GameplayTest3() {
 // the knocking player has gin.
 void WallTest() {
   GameParameters params;
-  Utils utils = Utils(13, 4);  // TODO
+  Utils utils = Utils(13, 4, 10);  // TODO
   std::shared_ptr<const open_spiel::Game> game =
       open_spiel::LoadGame("gin_rummy", params);
   std::unique_ptr<open_spiel::State> state = game->NewInitialState();

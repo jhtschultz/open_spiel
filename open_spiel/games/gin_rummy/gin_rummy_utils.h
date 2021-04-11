@@ -27,7 +27,7 @@ namespace gin_rummy {
 //inline constexpr int kNumSuits = 4;
 //inline constexpr int kNumRanks = 13;
 //inline constexpr int kNumCards = kNumSuits * kNumRanks;
-inline constexpr int kMaxHandSize = 11;
+//inline constexpr int kMaxHandSize = 11;  // TODO
 
 using VecInt = std::vector<int>;
 using VecVecInt = std::vector<std::vector<int>>;
@@ -64,12 +64,13 @@ class Utils {
  public:
   //Utils();
   // TODO check order of ranks and suits everywhere
-  Utils(int num_ranks, int num_suits);
+  Utils(int num_ranks, int num_suits, int hand_size);
 
   // TODO remove trailing underscore?
   const int num_suits_;
   const int num_ranks_;
   const int num_cards_;
+  const int hand_size_;
 
   const SuitComparator suit_comp_;
   const RankComparator rank_comp_;
