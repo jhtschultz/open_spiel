@@ -66,6 +66,7 @@ class Utils {
   // TODO check order of ranks and suits everywhere
   Utils(int num_ranks, int num_suits);
 
+  // TODO remove trailing underscore?
   const int num_suits_;
   const int num_ranks_;
   const int num_cards_;
@@ -132,6 +133,7 @@ class Utils {
   //static const std::map<int, VecInt> int_to_meld = BuildIntToMeldMap();
   //static const std::map<VecInt, int> meld_to_int = BuildMeldToIntMap();
 
+  // TODO static? const? 
   const std::map<int, VecInt> int_to_meld;
   const std::map<VecInt, int> meld_to_int;
 };

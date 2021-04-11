@@ -31,9 +31,9 @@ Utils::Utils(int num_ranks, int num_suits) :
       num_suits_(num_suits),
       num_cards_(num_ranks * num_suits_),
       rank_comp_(RankComparator(num_ranks)),
-      suit_comp_(SuitComparator(num_ranks)) {
-  std::map<int, VecInt> int_to_meld = BuildIntToMeldMap();
-  std::map<VecInt, int> meld_to_int = BuildMeldToIntMap();
+      suit_comp_(SuitComparator(num_ranks)),
+      int_to_meld(BuildIntToMeldMap()),
+      meld_to_int(BuildMeldToIntMap()) {
 }
 
 // TODO
