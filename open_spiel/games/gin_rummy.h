@@ -51,6 +51,7 @@ namespace gin_rummy {
 // TODO
 inline constexpr int kDefaultNumRanks = 13;
 inline constexpr int kDefaultNumSuits = 4;
+inline constexpr int kDefaultNumCards = 52;
 
 inline constexpr int kNumPlayers = 2;
 inline constexpr int kMaxPossibleDeadwood = 98;  // E.g. KsKcQdQhJsJcTdTh9s9c
@@ -68,12 +69,13 @@ inline constexpr int kKnockAction = 55;
 inline constexpr int kMeldActionBase = 56;  // First lay meld action
 inline constexpr int kNumMeldActions = 185;
 inline constexpr int kNumDistinctActions = kMeldActionBase + kNumMeldActions;
+// TODO
 inline constexpr int kObservationTensorSize =
     kNumPlayers          // Player turn
     + kDefaultKnockCard  // Knock card
-    + kNumCards          // Player hand
-    + kNumCards          // Upcard
-    + kNumCards          // Discard pile
+    + kDefaultNumCards   // Player hand
+    + kDefaultNumCards   // Upcard
+    + kDefaultNumCards   // Discard pile
     + kMaxStockSize      // Stock size
     + kNumMeldActions;   // Opponent's layed melds
 
@@ -146,7 +148,7 @@ class GinRummyState : public State {
   const int num_suits_;
   const int hand_size_;
   const int num_cards_;
-  //Utils utils_ = Utils();
+  const Utils utils_;
 
   Phase phase_ = Phase::kDeal;
   Player cur_player_ = kChancePlayerId;
@@ -154,7 +156,7 @@ class GinRummyState : public State {
   bool finished_layoffs_ = false;
   absl::optional<int> upcard_;
   absl::optional<int> prev_upcard_;  // Used to track repeated moves.
-  int stock_size_ = kNumCards;      // Number of cards remaining in stock.
+  int stock_size_ = kDefaultNumCards;      // Number of cards remaining in stock.
   // True if the prev player drew the upcard only to immediately discard it.
   // If both players do this in succession the game is declared a draw.
   bool repeated_move_ = false;
@@ -194,7 +196,7 @@ class GinRummyGame : public Game {
   explicit GinRummyGame(const GameParameters& params);
 
   int NumDistinctActions() const override { return kNumDistinctActions; }
-  int MaxChanceOutcomes() const override { return kNumCards; }
+  int MaxChanceOutcomes() const override { return kDefaultNumCards; }
   int NumPlayers() const override { return kNumPlayers; }
   double MinUtility() const override {
     return -(kMaxPossibleDeadwood + gin_bonus_);

@@ -24,78 +24,116 @@
 namespace open_spiel {
 namespace gin_rummy {
 
-inline constexpr int kNumSuits = 4;
-inline constexpr int kNumRanks = 13;
-inline constexpr int kNumCards = kNumSuits * kNumRanks;
+//inline constexpr int kNumSuits = 4;
+//inline constexpr int kNumRanks = 13;
+//inline constexpr int kNumCards = kNumSuits * kNumRanks;
 inline constexpr int kMaxHandSize = 11;
 
 using VecInt = std::vector<int>;
 using VecVecInt = std::vector<std::vector<int>>;
 using VecVecVecInt = std::vector<std::vector<std::vector<int>>>;
 
+// TODO changed logic in first if statement
+struct SuitComparator {
+  SuitComparator(const int num_ranks) : num_ranks_(num_ranks) {}
+  int CardSuit(int card) { return card / num_ranks_; }
+  bool operator()(int card_1, int card_2) {
+    if (CardSuit(card_1) == CardSuit(card_2)) {
+      return card_1 < card_2;
+    }
+    return CardSuit(card_1) < CardSuit(card_2);
+  }
+  int num_ranks_;
+};
+
+// TODO
+struct RankComparator {
+  RankComparator(const int num_ranks) : num_ranks_(num_ranks) {}
+  int CardRank(int card) { return card % num_ranks_; }
+  bool operator()(int card_1, int card_2) {
+    if (CardRank(card_1) == CardRank(card_2)) {
+      return card_1 < card_2;
+    }
+    return CardRank(card_1) < CardRank(card_2);
+  }
+  int num_ranks_;
+};
+
+
 class Utils {
  public:
-  Utils();
+  //Utils();
+  // TODO check order of ranks and suits everywhere
+  Utils(int num_ranks, int num_suits);
 
-  static std::string CardString(absl::optional<int> card);
-  static std::string HandToString(const VecInt &cards);
+  const int num_suits_;
+  const int num_ranks_;
+  const int num_cards_;
+
+  const SuitComparator suit_comp_;
+  const RankComparator rank_comp_;
   
-  static int CardInt(std::string card);
+
+  std::string CardString(absl::optional<int> card) const;
+  std::string HandToString(const VecInt &cards) const;
   
-  static std::vector<std::string> CardIntsToCardStrings(const VecInt &cards);
-  static VecInt CardStringsToCardInts(const std::vector<std::string> &cards);
+  int CardInt(std::string card) const;
   
-  static int CardValue(int card_index);
-  static int TotalCardValue(const VecInt &cards);
-  static int TotalCardValue(const VecVecInt &meld_group);
-  static int CardRank(const int card_index);
-  static int CardSuit(const int card_index);
+  std::vector<std::string> CardIntsToCardStrings(const VecInt &cards) const;
+  VecInt CardStringsToCardInts(const std::vector<std::string> &cards) const;
   
-  static bool CompareRanks(int card_1, int card_2);
-  static bool CompareSuits(int card_1, int card_2);
+  int CardValue(int card_index) const;
+  int TotalCardValue(const VecInt &cards) const;
+  int TotalCardValue(const VecVecInt &meld_group) const;
+  int CardRank(const int card_index) const;
+  int CardSuit(const int card_index) const;
   
   // TODO
-  static bool IsConsecutive(const VecInt &v);
-  static bool IsRankMeld(const VecInt &cards);
-  static bool IsSuitMeld(const VecInt &cards);
+  //static bool CompareRanks(int card_1, int card_2);
+  //static bool CompareSuits(int card_1, int card_2);
   
-  static VecVecInt RankMelds(VecInt cards);
-  static VecVecInt SuitMelds(VecInt cards);
-  static VecVecInt AllMelds(const VecInt &cards);
+  // TODO
+  bool IsConsecutive(const VecInt &v) const;
+  bool IsRankMeld(const VecInt &cards) const;
+  bool IsSuitMeld(const VecInt &cards) const;
   
-  static bool VectorsIntersect(VecInt *v1, VecInt *v2);
+  VecVecInt RankMelds(VecInt cards) const;
+  VecVecInt SuitMelds(VecInt cards) const;
+  VecVecInt AllMelds(const VecInt &cards) const;
   
-  static VecVecInt NonOverlappingMelds(VecInt *meld, VecVecInt *melds);
+  bool VectorsIntersect(VecInt *v1, VecInt *v2) const;
   
-  static void AllPaths(VecInt *meld, VecVecInt *all_melds, VecVecInt *path,
-                VecVecVecInt *all_paths);
+  VecVecInt NonOverlappingMelds(VecInt *meld, VecVecInt *melds) const;
   
-  static VecVecVecInt AllMeldGroups(const VecInt &cards);
+  void AllPaths(VecInt *meld, VecVecInt *all_melds, VecVecInt *path,
+         VecVecVecInt *all_paths) const;
   
-  static VecVecInt BestMeldGroup(const VecInt &cards);
+  VecVecVecInt AllMeldGroups(const VecInt &cards) const;
   
-  static int MinDeadwood(VecInt hand, absl::optional<int> card);
-  static int MinDeadwood(const VecInt &hand);
+  VecVecInt BestMeldGroup(const VecInt &cards) const;
   
-  static int RankMeldLayoff(const VecInt &meld);
-  static VecInt SuitMeldLayoffs(const VecInt &meld);
+  int MinDeadwood(VecInt hand, absl::optional<int> card) const;
+  int MinDeadwood(const VecInt &hand) const;
   
-  static VecInt LegalMelds(const VecInt &hand, int knock_card);
-  static VecInt LegalDiscards(const VecInt &hand, int knock_card);
+  int RankMeldLayoff(const VecInt &meld) const;
+  VecInt SuitMeldLayoffs(const VecInt &meld) const;
   
-  static VecInt AllLayoffs(const VecInt &layed_melds, const VecInt &previous_layoffs);
+  VecInt LegalMelds(const VecInt &hand, int knock_card) const;
+  VecInt LegalDiscards(const VecInt &hand, int knock_card) const;
   
-  static int MeldToInt(VecInt meld);
+  VecInt AllLayoffs(const VecInt &layed_melds, const VecInt &previous_layoffs) const;
   
-  static std::map<VecInt, int> BuildMeldToIntMap();
-  static std::map<int, VecInt> BuildIntToMeldMap();
+  int MeldToInt(VecInt meld) const;
+  
+  std::map<VecInt, int> BuildMeldToIntMap() const;
+  std::map<int, VecInt> BuildIntToMeldMap() const;
   
   // TODO
   //static const std::map<int, VecInt> int_to_meld = BuildIntToMeldMap();
   //static const std::map<VecInt, int> meld_to_int = BuildMeldToIntMap();
 
-  static std::map<int, VecInt> int_to_meld;
-  static std::map<VecInt, int> meld_to_int;
+  const std::map<int, VecInt> int_to_meld;
+  const std::map<VecInt, int> meld_to_int;
 };
 
 }  // namespace gin_rummy
