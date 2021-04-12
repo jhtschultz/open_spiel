@@ -149,6 +149,7 @@ class GinRummyState : public State {
   const int hand_size_;
   const int num_cards_;
   const Utils utils_;
+  int stock_size_;      // Number of cards remaining in stock. TODO
 
   Phase phase_ = Phase::kDeal;
   Player cur_player_ = kChancePlayerId;
@@ -156,7 +157,6 @@ class GinRummyState : public State {
   bool finished_layoffs_ = false;
   absl::optional<int> upcard_;
   absl::optional<int> prev_upcard_;  // Used to track repeated moves.
-  int stock_size_ = kDefaultNumCards;      // Number of cards remaining in stock.
   // True if the prev player drew the upcard only to immediately discard it.
   // If both players do this in succession the game is declared a draw.
   bool repeated_move_ = false;
@@ -211,6 +211,7 @@ class GinRummyGame : public Game {
                           gin_bonus_, undercut_bonus_, num_ranks_, num_suits_,
                           hand_size_));
   }
+  // TODO move logic here
   std::vector<int> ObservationTensorShape() const override {
     return {kObservationTensorSize};
   }

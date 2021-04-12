@@ -42,9 +42,19 @@ void UtilTests() {
   std::cout << utils.HandToString(card_ints) << std::endl;
 }
 
+
 void BasicGameTests() {
-  testing::LoadGameTest("gin_rummy");
-  testing::RandomSimTest(*LoadGame("gin_rummy"), 10);
+  GameParameters params;
+  params["num_ranks"] = GameParameter(10);
+  params["num_suits"] = GameParameter(3);
+  params["hand_size"] = GameParameter(10);
+  std::shared_ptr<const open_spiel::Game> game =
+      open_spiel::LoadGame("gin_rummy", params);
+  //std::unique_ptr<open_spiel::State> state = game->NewInitialState();
+
+  //testing::LoadGameTest("gin_rummy");
+  //testing::RandomSimTest(*LoadGame("gin_rummy"), 10);
+  testing::RandomSimTest(*game, 10);
 }
 
 void MeldTests() {

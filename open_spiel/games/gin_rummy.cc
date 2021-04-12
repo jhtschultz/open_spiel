@@ -75,6 +75,7 @@ GinRummyState::GinRummyState(std::shared_ptr<const Game> game, bool oklahoma,
       hand_size_(hand_size),
       num_cards_(num_ranks * num_suits),
       utils_(Utils(num_ranks, num_suits, hand_size)),
+      stock_size_(num_ranks * num_suits),
       deck_(num_ranks * num_suits, true) {}
 
 int GinRummyState::CurrentPlayer() const {
@@ -336,6 +337,7 @@ std::vector<Action> GinRummyState::LegalActions() const {
 
 std::vector<Action> GinRummyState::DealLegalActions() const {
   std::vector<Action> legal_actions;
+  std::cout << "num_cards: " << num_cards_ << std::endl;  // TODO
   for (int card = 0; card < num_cards_; ++card) {
     if (deck_[card]) legal_actions.push_back(card);
   }

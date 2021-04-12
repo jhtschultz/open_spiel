@@ -46,7 +46,7 @@ struct SuitComparator {
   int num_ranks_;
 };
 
-// TODO
+// TODO struct or class?
 struct RankComparator {
   RankComparator(const int num_ranks) : num_ranks_(num_ranks) {}
   int CardRank(int card) { return card % num_ranks_; }
