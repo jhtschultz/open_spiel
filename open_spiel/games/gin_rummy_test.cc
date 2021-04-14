@@ -549,14 +549,12 @@ void ObserverTest() {
   for (auto action : initial_actions) state->ApplyAction(action);
   std::cout << state->ToString() << std::endl;
 
-  std::cout << observation.StringFrom(*state, 0) << std::endl;
-  observation.SetFrom(*state, 0);
-  std::cout << observation.Tensor() << std::endl;
-  std::cout << observation.StringFrom(*state, 1) << std::endl;
-  observation.SetFrom(*state, 1);
-  std::cout << observation.Tensor() << std::endl;
-  std::cout << state->ObservationTensor(1) << std::endl;
-  SPIEL_CHECK_EQ(observation.Tensor(), state->ObservationTensor(1));
+  for (int player = 0; player < kNumPlayers; ++player) {
+    std::cout << observation.StringFrom(*state, player) << std::endl;
+    observation.SetFrom(*state, player);
+    std::cout << observation.Tensor() << std::endl;
+    SPIEL_CHECK_EQ(observation.Tensor(), state->ObservationTensor(player));
+  }
 }
 
 }  // namespace
