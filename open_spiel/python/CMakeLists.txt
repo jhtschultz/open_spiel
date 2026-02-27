@@ -26,6 +26,8 @@ endif()
 # List of all Python bindings to add to pyspiel.
 include_directories (../pybind11_abseil ../../pybind11/include)
 set(PYTHON_BINDINGS ${PYTHON_BINDINGS}
+  ../pybind11_abseil/pybind11_abseil/import_status_module.cc
+  ../pybind11_abseil/pybind11_abseil/register_status_bindings.cc
   pybind11/algorithms_infostate_tree.cc
   pybind11/algorithms_infostate_tree_templates.h
   pybind11/algorithms_infostate_tree.h
@@ -131,6 +133,7 @@ endif()
 
 add_library(pyspiel MODULE ${PYTHON_BINDINGS} ${OPEN_SPIEL_OBJECTS})
 target_link_directories(pyspiel PUBLIC ${Python3_LIBRARY_DIRS})
+target_link_libraries(pyspiel PRIVATE absl::status)
 
 # Without this, the binary is called `libpyspiel.so`
 set_target_properties(pyspiel PROPERTIES PREFIX "")
