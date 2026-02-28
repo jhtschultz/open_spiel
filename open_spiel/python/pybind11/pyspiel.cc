@@ -81,6 +81,7 @@
 // Includes needed for absl::optional.
 #include "pybind11/include/pybind11/detail/common.h"
 #include "pybind11_abseil/absl_casters.h"
+#include "pybind11_abseil/import_status_module.h"
 
 // List of optional python submodules.
 #if OPEN_SPIEL_BUILD_WITH_GAMUT
@@ -153,6 +154,10 @@ static py::object CreatePlayerIdIntEnum(py::module_ m) {
 PYBIND11_MODULE(pyspiel, m) {
   m.doc() = "Open Spiel";
   m.attr("__version__") = PYSPIEL_VERSION;
+
+  // Import the pybind11_abseil status module so that absl::Status and
+  // absl::StatusOr can be used across the Python/C++ boundary.
+  pybind11::google::ImportStatusModule();
 
   m.attr("PlayerId") = CreatePlayerIdIntEnum(m);
 
